@@ -33,6 +33,7 @@ async function seedBike(bikeDetail) {
   const bike = new Bike({
     bikeType: bikeDetail.bikeType.toUpperCase(),
     vehicle: bikeDetail.vehicle,
+    minDate: new Date(),
     booked: false,
   });
 
@@ -56,6 +57,7 @@ async function seedCar(carDetail) {
   const car = new Car({
     carType: carDetail.carType.toUpperCase(),
     vehicle: carDetail.vehicle,
+    minDate: new Date(),
     booked: false,
   });
 

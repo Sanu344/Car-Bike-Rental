@@ -8,8 +8,8 @@ const schema = mongoose.Schema({
   },
   vehicle: { type: String, required: true },
   booked: { type: Boolean, required: true },
-  minDate: { type: string },
-  maxDate: { type: string },
+  minDate: { type: String },
+  maxDate: { type: String },
 });
 
 const Car = new mongoose.model("Cars", schema);

@@ -15,9 +15,8 @@ const Booking = new mongoose.model("Bookings", schema);
 
 function validateBooking(body) {
   const schema = joi.object({
-    carType: joi.string().required(),
+    wheels: joi.string().required(),
     vehicle: joi.string().required(),
-    booked: joi.boolean().required(),
     minDate: joi.string().required(),
     maxDate: joi.string().required(),
   });
