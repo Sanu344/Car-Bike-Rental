@@ -3,20 +3,23 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-let model = ["A", "B", "C"];
+let model = ["A", "B", "C", "D", "E"];
+let vehicles = ["a", "b", "c", "d", "e", "f", "g"];
 function App() {
-  const [form, setForm] = useState(false);
+  const [form, setForm] = useState(true);
   const [wheels, setWheels] = useState(false);
-  const [vehicleType, setVehicleType] = useState(true);
+  const [vehicleType, setVehicleType] = useState(false);
   const [models, setModels] = useState(false);
   const [w, setW] = useState();
   const [type, setType] = useState();
-
+  const [vehicle, setVehicle] = useState();
   const [submit, setSubmit] = useState(false);
   const [submitWheel, setSubmitWheel] = useState(false);
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
-
+  const [datePicker, setDatePicker] = useState(false);
+  const [disableSubmitType, setDisableSubmitType] = useState(false);
+  const [modelSubmitType, setModelSubmitType] = useState(false);
   const { handleSubmit, register } = useForm();
 
   useEffect(() => {
@@ -45,7 +48,7 @@ function App() {
 
   function onWheelsRadio(data) {
     const wh = w;
-    console.log(w);
+    console.log(wh);
     localStorage.setItem("wheels", JSON.stringify(wh));
     setWheels(false);
     setVehicleType(true);
@@ -57,6 +60,13 @@ function App() {
     localStorage.setItem("type", JSON.stringify(t));
     setVehicleType(false);
     setModels(true);
+  }
+  function onSelectVehicle() {
+    const v = vehicle;
+    console.log(v);
+    localStorage.setItem("vehicle", JSON.stringify(v));
+    setModels(false);
+    setDatePicker(true);
   }
 
   return (
@@ -150,30 +160,72 @@ function App() {
               <br />
               <label>Vehicle Type</label>
               <br />
-              {model.map((e) => {
-                return (
-                  <div key={"div" + e}>
-                    <br key={"linebreak1" + e} />
-                    <input
-                      type="radio"
-                      id={e}
-                      name={e}
-                      value={e}
-                      key={e}
-                      onChange={() => setType(e)}
-                    />
-                    <label key={"label" + e}>{e}</label>
-                    <br key={"linebreak2" + e} />
-                    <br key={"linebreak3" + e} />
-                  </div>
-                );
-              })}
-              <button className="typeSubmit">Next</button>
+              <div className="insideType">
+                {model.map((e) => {
+                  return (
+                    <div key={"div" + e}>
+                      <br key={"linebreak1" + e} />
+                      <input
+                        type="radio"
+                        id={e}
+                        name={e}
+                        value={e}
+                        key={e}
+                        onChange={() => {
+                          setType(e);
+                          setDisableSubmitType(true);
+                        }}
+                      />
+                      <label key={"label" + e}>{e}</label>
+                      <br key={"linebreak2" + e} />
+                    </div>
+                  );
+                })}
+              </div>
+              <button disabled={!disableSubmitType} className="typeSubmit">
+                Next
+              </button>
             </form>
           </div>
         )}
-        {models && <div className="model"></div>}
-        <div className="date"></div>
+        {models && (
+          <div className="model">
+            <form
+              onSubmit={handleSubmit(onSelectVehicle)}
+              className="vehicleType"
+            >
+              <br />
+              <label>Vehicles Available</label>
+              <br />
+              <div className="insideType">
+                {vehicles.map((e) => {
+                  return (
+                    <div key={"div" + e}>
+                      <br key={"linebreak1" + e} />
+                      <input
+                        type="radio"
+                        id={e}
+                        name={e}
+                        value={e}
+                        key={e}
+                        onChange={() => {
+                          setVehicle(e);
+                          setModelSubmitType(true);
+                        }}
+                      />
+                      <label key={"label" + e}>{e}</label>
+                      <br key={"linebreak2" + e} />
+                    </div>
+                  );
+                })}
+              </div>
+              <button disabled={!modelSubmitType} className="typeSubmit">
+                Next
+              </button>
+            </form>
+          </div>
+        )}
+        {datePicker && <div className="date"></div>}
       </div>
     </>
   );

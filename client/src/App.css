@@ -73,3 +73,17 @@
   width: 450px;
   height: 30px;
 }
+.insideType {
+  height: 130px;
+  overflow: auto;
+}
+.model {
+  position: relative;
+  top: 200px;
+  width: 500px;
+  height: 250px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
