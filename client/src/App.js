@@ -1,15 +1,19 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DateRangePicker from "rsuite/DateRangePicker";
+
+// (Optional) Import component styles. If you are using Less, import the `index.less` file.
+import "rsuite/DateRangePicker/styles/index.css";
+import isAfter from "date-fns/isAfter";
 let model = ["A", "B", "C", "D", "E"];
 let vehicles = ["a", "b", "c", "d", "e", "f", "g"];
 function App() {
-  const [form, setForm] = useState(true);
+  const [form, setForm] = useState(false);
   const [wheels, setWheels] = useState(false);
   const [vehicleType, setVehicleType] = useState(false);
   const [models, setModels] = useState(false);
+  const [datePicker, setDatePicker] = useState(true);
   const [w, setW] = useState();
   const [type, setType] = useState();
   const [vehicle, setVehicle] = useState();
@@ -17,7 +21,7 @@ function App() {
   const [submitWheel, setSubmitWheel] = useState(false);
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
-  const [datePicker, setDatePicker] = useState(false);
+
   const [disableSubmitType, setDisableSubmitType] = useState(false);
   const [modelSubmitType, setModelSubmitType] = useState(false);
   const { handleSubmit, register } = useForm();
@@ -69,6 +73,13 @@ function App() {
     setDatePicker(true);
   }
 
+  const Label = (props) => {
+    return <label style={{ display: "block", marginTop: 10 }} {...props} />;
+  };
+
+  function isWithinRange(date, startDate, endDate) {
+    return date >= startDate && date <= endDate;
+  }
   return (
     <>
       <div className="container">
@@ -225,7 +236,36 @@ function App() {
             </form>
           </div>
         )}
-        {datePicker && <div className="date"></div>}
+        {datePicker && (
+          <div className="date">
+            <br />
+            <label>Select Date Range</label>
+            <br />
+            <DateRangePicker
+              shouldDisableDate={(date) => {
+                const startDates = [
+                  new Date(),
+                  new Date(2024, 5, 1),
+                  new Date(2024, 7, 1),
+                ];
+
+                const endDates = [
+                  new Date(),
+                  new Date(2024, 5, 7),
+                  new Date(2024, 7, 7),
+                ];
+
+                for (let i = 0; i < startDates.length; i++) {
+                  if (isWithinRange(date, startDates[i], endDates[i])) {
+                    return true;
+                  }
+                }
+
+                return false;
+              }}
+            />
+          </div>
+        )}
       </div>
     </>
   );
