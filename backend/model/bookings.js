@@ -2,27 +2,26 @@ const mongoose = require("mongoose");
 const joi = require("joi");
 
 const schema = mongoose.Schema({
-  bikeType: {
+  wheels: {
     type: String,
     required: true,
   },
   vehicle: { type: String, required: true },
-  booked: { type: Boolean, required: true },
-  minDate: { type: string },
-  maxDate: { type: string },
+  minDate: { type: string, required: true },
+  maxDate: { type: string, required: true },
 });
 
-const Bike = new mongoose.model("Bikes", schema);
+const Car = new mongoose.model("Cars", schema);
 
-function validateBike(body) {
+function validateCar(body) {
   const schema = joi.object({
-    bikeType: joi.string().required(),
+    carType: joi.string().required(),
     vehicle: joi.string().required(),
     booked: joi.boolean().required(),
-    minDate: joi.string(),
-    maxDate: joi.string(),
+    minDate: joi.string().required(),
+    maxDate: joi.string().required(),
   });
   return schema.validate(body);
 }
 
-module.exports = { Bike, validateBike };
+module.exports = { Car, validateCar };
