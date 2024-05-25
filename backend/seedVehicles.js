@@ -1,12 +1,24 @@
 const mongoose = require("mongoose");
 const config = require("config");
 const { Bike, validateBike } = require("./model/available_Bike");
+const { Car, validateCar } = require("./model/available_car");
 
-const addBike = { bikeType: "sports", vehicle: "Raider" };
+const addBike = [{ bikeType: "sports", vehicle: "Raider" }];
+const addCar = [
+  { carType: "HatchBack", vehicle: "Hyundai i20" },
+  { carType: "suv", vehicle: "Mahindra Scorpio" },
+];
 
-mongoose.connect(config.get("MONGOURL")).then(() => {
+mongoose.connect(config.get("MONGOURL")).then(async () => {
   console.log("connected to data base... ");
-  seedBike(addBike);
+
+  for (let i = 0; i < addBike.length; i++) {
+    seedBike(addBike[i]);
+  }
+
+  for (let i = 0; i < addCar.length; i++) {
+    seedCar(addCar[i]);
+  }
 });
 
 async function seedBike(bikeDetail) {
@@ -16,10 +28,10 @@ async function seedBike(bikeDetail) {
     booked: false,
   };
   const { error } = validateBike(body);
-  if (error) console.log(error.message);
+  if (error) return console.log(error.message);
 
   const bike = new Bike({
-    bikeType: bikeDetail.bikeType,
+    bikeType: bikeDetail.bikeType.toUpperCase(),
     vehicle: bikeDetail.vehicle,
     booked: false,
   });
@@ -32,4 +44,25 @@ async function seedBike(bikeDetail) {
   }
 }
 
-function seedCar(type, vehicle) {}
+async function seedCar(carDetail) {
+  const body = {
+    carType: carDetail.carType,
+    vehicle: carDetail.vehicle,
+    booked: false,
+  };
+  const { error } = validateCar(body);
+  if (error) return console.log(error.message);
+
+  const car = new Car({
+    carType: carDetail.carType.toUpperCase(),
+    vehicle: carDetail.vehicle,
+    booked: false,
+  });
+
+  try {
+    const data = await car.save();
+    console.log(data);
+  } catch (error) {
+    console.log(error.messgae);
+  }
+}
