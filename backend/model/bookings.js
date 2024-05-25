@@ -11,9 +11,9 @@ const schema = mongoose.Schema({
   maxDate: { type: string, required: true },
 });
 
-const Car = new mongoose.model("Cars", schema);
+const Booking = new mongoose.model("Bookings", schema);
 
-function validateCar(body) {
+function validateBooking(body) {
   const schema = joi.object({
     carType: joi.string().required(),
     vehicle: joi.string().required(),
@@ -24,4 +24,4 @@ function validateCar(body) {
   return schema.validate(body);
 }
 
-module.exports = { Car, validateCar };
+module.exports = { Booking, validateBooking };
