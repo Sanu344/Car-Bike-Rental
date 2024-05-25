@@ -4,9 +4,12 @@ const { Bike, validateBike } = require("./model/available_Bike");
 const { Car, validateCar } = require("./model/available_car");
 
 const addBike = [{ bikeType: "sports", vehicle: "Raider" }];
+
 const addCar = [
   { carType: "HatchBack", vehicle: "Hyundai i20" },
   { carType: "suv", vehicle: "Mahindra Scorpio" },
+  { carType: "sedan", vehicle: "Honda City" },
+  { carType: "sedan", vehicle: "Skoda Slavia" },
 ];
 
 mongoose.connect(config.get("MONGOURL")).then(async () => {
