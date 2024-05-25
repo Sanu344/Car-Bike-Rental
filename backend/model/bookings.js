@@ -9,6 +9,7 @@ const schema = mongoose.Schema({
   vehicle: { type: String, required: true },
   minDate: { type: String, required: true },
   maxDate: { type: String, required: true },
+  user: { type: String, required: true },
 });
 
 const Booking = new mongoose.model("Bookings", schema);
@@ -19,6 +20,7 @@ function validateBooking(body) {
     vehicle: joi.string().required(),
     minDate: joi.string().required(),
     maxDate: joi.string().required(),
+    user: joi.string().required(),
   });
   return schema.validate(body);
 }
