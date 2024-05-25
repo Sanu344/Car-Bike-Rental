@@ -2,6 +2,7 @@ const express = require("express");
 const vehicles = express.Router();
 const { Car } = require("../model/available_car");
 const { Bike } = require("../model/available_Bike");
+const { Booking } = require("../model/bookings");
 
 vehicles.get("/", async (req, res) => {
   console.log("ascessed end point: api/list");
@@ -18,10 +19,13 @@ vehicles.get("/", async (req, res) => {
     const bikeTypes = Array.from(set_BikeTypes);
     console.log(bikeTypes);
 
+    const vehicleBookings = await Booking.find();
+
     const vehicleAvailable = [...dataCars, ...dataBike];
 
     res.send({
       vehicleList: vehicleAvailable,
+      bookedVehicles: vehicleBookings,
       carTypesList: carTypes,
       bikeTypeList: bikeTypes,
     });
