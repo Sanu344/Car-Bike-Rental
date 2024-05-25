@@ -29,3 +29,29 @@
   width: 450px;
   height: 30px;
 }
+.wheels {
+  position: relative;
+  top: 200px;
+  width: 500px;
+  height: 250px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.wheelForm {
+  width: 450px;
+}
+
+.wheelFirst {
+  width: 450px;
+  height: 30px;
+}
+.wheelLast {
+  width: 450px;
+  height: 30px;
+}
+.wheelSubmit {
+  width: 450px;
+  height: 30px;
+}
