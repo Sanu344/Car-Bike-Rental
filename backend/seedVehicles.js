@@ -31,7 +31,7 @@ async function seedBike(bikeDetail) {
     booked: false,
   };
   const { error } = validateBike(body);
-  if (error) return console.log(error.message);
+  if (error) return console.log(error.details[0].message);
 
   const bike = new Bike({
     bikeType: bikeDetail.bikeType.toUpperCase(),
@@ -44,7 +44,7 @@ async function seedBike(bikeDetail) {
     const data = await bike.save();
     console.log(data);
   } catch (error) {
-    console.log(error.messgae);
+    console.log(error.details[0].message);
   }
 }
 

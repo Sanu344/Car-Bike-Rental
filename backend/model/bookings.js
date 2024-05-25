@@ -7,8 +7,8 @@ const schema = mongoose.Schema({
     required: true,
   },
   vehicle: { type: String, required: true },
-  minDate: { type: string, required: true },
-  maxDate: { type: string, required: true },
+  minDate: { type: String, required: true },
+  maxDate: { type: String, required: true },
 });
 
 const Booking = new mongoose.model("Bookings", schema);
