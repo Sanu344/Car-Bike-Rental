@@ -55,3 +55,21 @@
   width: 450px;
   height: 30px;
 }
+.type {
+  position: relative;
+  top: 200px;
+  width: 500px;
+  height: 250px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  overflow: auto;
+}
+.vehicleType {
+  width: 450px;
+}
+.typeSubmit {
+  width: 450px;
+  height: 30px;
+}

@@ -3,11 +3,15 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+let model = ["A", "B", "C"];
 function App() {
-  const [form, setForm] = useState(true);
+  const [form, setForm] = useState(false);
   const [wheels, setWheels] = useState(false);
+  const [vehicleType, setVehicleType] = useState(true);
+  const [models, setModels] = useState(false);
   const [w, setW] = useState();
-  const [vehicleType, setVehicleType] = useState(false);
+  const [type, setType] = useState();
+
   const [submit, setSubmit] = useState(false);
   const [submitWheel, setSubmitWheel] = useState(false);
   const [first, setFirst] = useState("");
@@ -45,6 +49,14 @@ function App() {
     localStorage.setItem("wheels", JSON.stringify(wh));
     setWheels(false);
     setVehicleType(true);
+  }
+
+  function onSelectType() {
+    const t = type;
+    console.log(t);
+    localStorage.setItem("type", JSON.stringify(t));
+    setVehicleType(false);
+    setModels(true);
   }
 
   return (
@@ -132,8 +144,35 @@ function App() {
             </form>
           </div>
         )}
-        {vehicleType && <div className="type"></div>}
-        <div className="model"></div>
+        {vehicleType && (
+          <div className="type">
+            <form onSubmit={handleSubmit(onSelectType)} className="vehicleType">
+              <br />
+              <label>Vehicle Type</label>
+              <br />
+              {model.map((e) => {
+                return (
+                  <div key={"div" + e}>
+                    <br key={"linebreak1" + e} />
+                    <input
+                      type="radio"
+                      id={e}
+                      name={e}
+                      value={e}
+                      key={e}
+                      onChange={() => setType(e)}
+                    />
+                    <label key={"label" + e}>{e}</label>
+                    <br key={"linebreak2" + e} />
+                    <br key={"linebreak3" + e} />
+                  </div>
+                );
+              })}
+              <button className="typeSubmit">Next</button>
+            </form>
+          </div>
+        )}
+        {models && <div className="model"></div>}
         <div className="date"></div>
       </div>
     </>
