@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.name {
+  position: relative;
+  top: 200px;
+  width: 500px;
+  height: 300px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.nameForm {
+  width: 450px;
+}
+
+.inputFirst {
+  width: 450px;
+  height: 30px;
+}
+.inputLast {
+  width: 450px;
+  height: 30px;
+}
+.nameSubmit {
+  width: 450px;
+  height: 30px;
+}
