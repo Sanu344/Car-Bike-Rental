@@ -109,7 +109,7 @@ function App() {
   }
   function onSelectVehicle() {
     const v = vehicle.toUpperCase();
-    localStorage.setItem("vehicle", JSON.stringify(v));
+    localStorage.setItem("vehicle", JSON.stringify(vehicle));
     const list = JSON.parse(localStorage.getItem("bookedVehicles"));
 
     const filtered = list.filter((e) => e.vehicle.toUpperCase() === v);
@@ -122,10 +122,6 @@ function App() {
     setModels(false);
     setDatePicker(true);
   }
-
-  const Label = (props) => {
-    return <label style={{ display: "block", marginTop: 10 }} {...props} />;
-  };
 
   function isWithinRange(date, startDate, endDate) {
     return date >= new Date(startDate) && date <= new Date(endDate);
@@ -154,6 +150,24 @@ function App() {
       user: JSON.parse(localStorage.getItem("name")),
     };
     console.table(body);
+    fetch("http://localhost:3030/api/submit", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        wheels: body.wheels + "",
+        vehicle: body.vehicle,
+        minDate: body.minDate,
+        maxDate: body.maxDate,
+        user: body.user,
+      }),
+    })
+      .then((data) => data.json())
+      .then((res) => {
+        alert(res.message);
+      });
   }
 
   return (
@@ -322,17 +336,6 @@ function App() {
             <DateRangePicker
               onChange={handleDateRangeChange}
               shouldDisableDate={(date) => {
-                // const startDates = [
-                //   new Date(),
-                //   new Date(2024, 5, 1),
-                //   new Date(2024, 7, 1),
-                // ];
-
-                // const endDates = [
-                //   new Date(),
-                //   new Date(2024, 5, 7),
-                //   new Date(2024, 7, 7),
-                // ];
                 for (let i = 0; i < startDates.length; i++) {
                   if (isWithinRange(date, startDates[i], endDates[i])) {
                     return true;

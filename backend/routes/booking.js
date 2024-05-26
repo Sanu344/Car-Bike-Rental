@@ -40,6 +40,7 @@ booking.post("/", async (req, res) => {
           vehicle: body.vehicle,
           minDate: body.minDate,
           maxDate: body.maxDate,
+          user: body.user,
         });
 
         const data = await bookVehicles.save();
@@ -73,6 +74,7 @@ booking.post("/", async (req, res) => {
           vehicle: body.vehicle,
           minDate: body.minDate,
           maxDate: body.maxDate,
+          user: body.user,
         });
 
         const data2 = await bookVehicle.save();
