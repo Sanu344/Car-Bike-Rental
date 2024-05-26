@@ -24,7 +24,7 @@ function App() {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [vlist, setVlist] = useState([]);
-
+  const [modelList, setModalList] = useState([]);
   const { handleSubmit, register } = useForm();
 
   useEffect(() => {
@@ -80,7 +80,6 @@ function App() {
       setVlist(JSON.parse(localStorage.getItem("bikeTypeList")));
     } else {
       setVlist(JSON.parse(localStorage.getItem("carTypeList")));
-      console.log(vlist);
     }
 
     setWheels(false);
@@ -90,12 +89,26 @@ function App() {
   function onSelectType() {
     const t = type;
     localStorage.setItem("type", JSON.stringify(t));
+    const unfilterdList = JSON.parse(localStorage.getItem("vehicleList"));
+    if (unfilterdList) {
+      const wh = JSON.parse(localStorage.getItem("wheels"));
+      if (wh === 2) {
+        const filtered = unfilterdList.filter((e) => e.bikeType === t);
+        if (filtered) setModalList(filtered.map((e) => e.vehicles));
+        console.log(filtered.map((e) => e.vehicles));
+      } else {
+        const filtered = unfilterdList.filter((e) => e.carType === t);
+        if (filtered) setModalList(filtered.map((e) => e.vehicle));
+        console.log(filtered.map((e) => e.vehicle));
+      }
+    }
     setVehicleType(false);
     setModels(true);
   }
   function onSelectVehicle() {
-    const v = vehicle;
+    const v = vehicle.toUpperCase();
     localStorage.setItem("vehicle", JSON.stringify(v));
+
     setModels(false);
     setDatePicker(true);
   }
@@ -232,7 +245,7 @@ function App() {
                       <input
                         type="radio"
                         id={e}
-                        name={e}
+                        name="vehicleType"
                         value={e}
                         key={e}
                         onChange={() => {
@@ -240,7 +253,9 @@ function App() {
                           setDisableSubmitType(true);
                         }}
                       />
-                      <label key={"label" + e}>{e}</label>
+                      <label htmlFor={e} key={"label" + e}>
+                        {e}
+                      </label>
                       <br key={"linebreak2" + e} />
                     </div>
                   );
@@ -262,14 +277,14 @@ function App() {
               <label>Vehicles Available</label>
               <br />
               <div className="insideType">
-                {vehicles.map((e) => {
+                {modelList.map((e) => {
                   return (
                     <div key={"div" + e}>
                       <br key={"linebreak1" + e} />
                       <input
                         type="radio"
                         id={e}
-                        name={e}
+                        name="models"
                         value={e}
                         key={e}
                         onChange={() => {
