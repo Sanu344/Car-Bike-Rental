@@ -25,6 +25,8 @@ function App() {
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [vlist, setVlist] = useState([]);
   const [modelList, setModalList] = useState([]);
+  const [startDates, setStartDates] = useState([]);
+  const [endDates, setEndDates] = useState([]);
   const { handleSubmit, register } = useForm();
 
   useEffect(() => {
@@ -94,7 +96,7 @@ function App() {
       const wh = JSON.parse(localStorage.getItem("wheels"));
       if (wh === 2) {
         const filtered = unfilterdList.filter((e) => e.bikeType === t);
-        if (filtered) setModalList(filtered.map((e) => e.vehicles));
+        if (filtered) setModalList(filtered.map((e) => e.vehicle));
         console.log(filtered.map((e) => e.vehicles));
       } else {
         const filtered = unfilterdList.filter((e) => e.carType === t);
@@ -108,6 +110,14 @@ function App() {
   function onSelectVehicle() {
     const v = vehicle.toUpperCase();
     localStorage.setItem("vehicle", JSON.stringify(v));
+    const list = JSON.parse(localStorage.getItem("bookedVehicles"));
+
+    const filtered = list.filter((e) => e.vehicle.toUpperCase() === v);
+    if (filtered) setStartDates(filtered.map((e) => e.minDate));
+    if (filtered) setEndDates(filtered.map((e) => e.maxDate));
+    console.log(filtered);
+    console.log(filtered.map((e) => e.maxDate));
+    console.log(filtered.map((e) => e.minDate));
 
     setModels(false);
     setDatePicker(true);
@@ -118,7 +128,7 @@ function App() {
   };
 
   function isWithinRange(date, startDate, endDate) {
-    return date >= startDate && date <= endDate;
+    return date >= new Date(startDate) && date <= new Date(endDate);
   }
 
   function handleDateRangeChange(d) {
@@ -312,18 +322,17 @@ function App() {
             <DateRangePicker
               onChange={handleDateRangeChange}
               shouldDisableDate={(date) => {
-                const startDates = [
-                  new Date(),
-                  new Date(2024, 5, 1),
-                  new Date(2024, 7, 1),
-                ];
+                // const startDates = [
+                //   new Date(),
+                //   new Date(2024, 5, 1),
+                //   new Date(2024, 7, 1),
+                // ];
 
-                const endDates = [
-                  new Date(),
-                  new Date(2024, 5, 7),
-                  new Date(2024, 7, 7),
-                ];
-
+                // const endDates = [
+                //   new Date(),
+                //   new Date(2024, 5, 7),
+                //   new Date(2024, 7, 7),
+                // ];
                 for (let i = 0; i < startDates.length; i++) {
                   if (isWithinRange(date, startDates[i], endDates[i])) {
                     return true;
