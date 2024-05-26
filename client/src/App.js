@@ -21,9 +21,11 @@ function App() {
   const [submitWheel, setSubmitWheel] = useState(false);
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
-
+  const [disableDate, setDisableDate] = useState(false);
   const [disableSubmitType, setDisableSubmitType] = useState(false);
   const [modelSubmitType, setModelSubmitType] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const { handleSubmit, register } = useForm();
 
   useEffect(() => {
@@ -80,6 +82,23 @@ function App() {
   function isWithinRange(date, startDate, endDate) {
     return date >= startDate && date <= endDate;
   }
+
+  function handleDateRangeChange(d) {
+    if (d) {
+      setSelectedStartDate(d[0]);
+      setSelectedEndDate(d[1]);
+      localStorage.setItem("startDate", JSON.stringify(d[0]));
+      localStorage.setItem("endDate", JSON.stringify(d[1]));
+      console.log(d[0]);
+      console.log(d[1]);
+      setDisableDate(true);
+    } else {
+      setDisableDate(false);
+    }
+  }
+
+  function handleDataSubmit() {}
+
   return (
     <>
       <div className="container">
@@ -242,6 +261,7 @@ function App() {
             <label>Select Date Range</label>
             <br />
             <DateRangePicker
+              onChange={handleDateRangeChange}
               shouldDisableDate={(date) => {
                 const startDates = [
                   new Date(),
@@ -264,6 +284,13 @@ function App() {
                 return false;
               }}
             />
+            <button
+              disabled={!disableDate}
+              onClick={handleDataSubmit}
+              className="date"
+            >
+              Book Vehicle
+            </button>
           </div>
         )}
       </div>
