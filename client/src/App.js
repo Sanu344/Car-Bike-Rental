@@ -2,18 +2,15 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import DateRangePicker from "rsuite/DateRangePicker";
-
-// (Optional) Import component styles. If you are using Less, import the `index.less` file.
 import "rsuite/DateRangePicker/styles/index.css";
-import isAfter from "date-fns/isAfter";
 let model = ["A", "B", "C", "D", "E"];
 let vehicles = ["a", "b", "c", "d", "e", "f", "g"];
 function App() {
-  const [form, setForm] = useState(false);
+  const [form, setForm] = useState(true);
   const [wheels, setWheels] = useState(false);
   const [vehicleType, setVehicleType] = useState(false);
   const [models, setModels] = useState(false);
-  const [datePicker, setDatePicker] = useState(true);
+  const [datePicker, setDatePicker] = useState(false);
   const [w, setW] = useState();
   const [type, setType] = useState();
   const [vehicle, setVehicle] = useState();
@@ -26,7 +23,33 @@ function App() {
   const [modelSubmitType, setModelSubmitType] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [vlist, setVlist] = useState([]);
+
   const { handleSubmit, register } = useForm();
+
+  useEffect(() => {
+    fetch("http://localhost:3030/api/list")
+      .then((data) => data.json())
+      .then((response) => {
+        console.table(response);
+        localStorage.setItem(
+          "carTypeList",
+          JSON.stringify(response.carTypesList)
+        );
+        localStorage.setItem(
+          "bikeTypeList",
+          JSON.stringify(response.bikeTypeList)
+        );
+        localStorage.setItem(
+          "vehicleList",
+          JSON.stringify(response.vehicleList)
+        );
+        localStorage.setItem(
+          "bookedVehicles",
+          JSON.stringify(response.bookedVehicles)
+        );
+      });
+  }, []);
 
   useEffect(() => {
     if (first) {
@@ -44,8 +67,6 @@ function App() {
   }, [last]);
 
   function onSubmitNameForm(data) {
-    console.log(data.firstName);
-    console.log(data.lastName);
     const name = data.firstName + " " + data.lastName;
     localStorage.setItem("name", JSON.stringify(name));
     setForm(false);
@@ -54,22 +75,26 @@ function App() {
 
   function onWheelsRadio(data) {
     const wh = w;
-    console.log(wh);
     localStorage.setItem("wheels", JSON.stringify(wh));
+    if (w === 2) {
+      setVlist(JSON.parse(localStorage.getItem("bikeTypeList")));
+    } else {
+      setVlist(JSON.parse(localStorage.getItem("carTypeList")));
+      console.log(vlist);
+    }
+
     setWheels(false);
     setVehicleType(true);
   }
 
   function onSelectType() {
     const t = type;
-    console.log(t);
     localStorage.setItem("type", JSON.stringify(t));
     setVehicleType(false);
     setModels(true);
   }
   function onSelectVehicle() {
     const v = vehicle;
-    console.log(v);
     localStorage.setItem("vehicle", JSON.stringify(v));
     setModels(false);
     setDatePicker(true);
@@ -89,15 +114,24 @@ function App() {
       setSelectedEndDate(d[1]);
       localStorage.setItem("startDate", JSON.stringify(d[0]));
       localStorage.setItem("endDate", JSON.stringify(d[1]));
-      console.log(d[0]);
-      console.log(d[1]);
       setDisableDate(true);
     } else {
       setDisableDate(false);
+      localStorage.removeItem("startDate");
+      localStorage.removeItem("endDate");
     }
   }
 
-  function handleDataSubmit() {}
+  function handleDataSubmit() {
+    const body = {
+      wheels: JSON.parse(localStorage.getItem("wheels")),
+      vehicle: JSON.parse(localStorage.getItem("vehicle")),
+      minDate: JSON.parse(localStorage.getItem("startDate")),
+      maxDate: JSON.parse(localStorage.getItem("endDate")),
+      user: JSON.parse(localStorage.getItem("name")),
+    };
+    console.table(body);
+  }
 
   return (
     <>
@@ -191,7 +225,7 @@ function App() {
               <label>Vehicle Type</label>
               <br />
               <div className="insideType">
-                {model.map((e) => {
+                {vlist.map((e) => {
                   return (
                     <div key={"div" + e}>
                       <br key={"linebreak1" + e} />
